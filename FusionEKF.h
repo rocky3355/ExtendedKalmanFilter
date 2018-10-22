@@ -25,6 +25,8 @@ private:
     Eigen::MatrixXd _RRadar;
     Eigen::MatrixXd _HLaser;
     Eigen::MatrixXd _Hj;
+    double _noiseAx;
+    double _noiseAy;
 };
 
 #endif /* FusionEKF_H_ */
