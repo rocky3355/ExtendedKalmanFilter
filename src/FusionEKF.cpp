@@ -12,16 +12,14 @@ FusionEKF::FusionEKF() {
     _HLaser = Eigen::MatrixXd(2, 4);
     _Hj = Eigen::MatrixXd(3, 4);
 
-    //measurement covariance matrix - laser
+    // Covariance matrices
     _RLaser << 0.0225, 0,
         0, 0.0225;
 
-    //measurement covariance matrix - radar
     _RRadar << 0.09, 0, 0,
         0, 0.0009, 0,
         0, 0, 0.09;
 
-    // Initialize measurement matrix for laser measurements
     _HLaser << 1, 0, 0, 0,
                0, 1, 0, 0;
 
@@ -75,18 +73,19 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement) {
     /*****************************************************************************
      *  Prediction
      ****************************************************************************/
-    float dt = (measurement.Timestamp - _previousTimestamp) / 1000000.0;	//dt - expressed in seconds
+    // dt is in seconds
+    float dt = (measurement.Timestamp - _previousTimestamp) / 1000000.0;
 	_previousTimestamp = measurement.Timestamp;
 
     float dt_2 = dt * dt;
 	float dt_3 = dt_2 * dt;
 	float dt_4 = dt_3 * dt;
 
-	//Modify the F matrix so that the time is integrated
+	// Modify the F matrix so that the time is integrated
 	Filter.F(0, 2) = dt;
 	Filter.F(1, 3) = dt;
 
-	//set the process covariance matrix Q
+	// Set the process covariance matrix Q
 	Filter.Q = Eigen::MatrixXd(4, 4);
 	Filter.Q << dt_4 / 4 * _noiseAx, 0, dt_3 / 2 * _noiseAx, 0,
 			    0, dt_4 / 4 * _noiseAy, 0, dt_3 / 2 * _noiseAy,

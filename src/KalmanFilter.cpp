@@ -15,7 +15,7 @@ void KalmanFilter::Predict() {
 
 void KalmanFilter::Update(const Eigen::VectorXd &z) {
     Eigen::VectorXd y = z - H * x;
-    UpdateWithY(y);
+    UpdateXAndP(y);
 }
 
 void KalmanFilter::UpdateEKF(const Eigen::VectorXd &z) {
@@ -30,6 +30,7 @@ void KalmanFilter::UpdateEKF(const Eigen::VectorXd &z) {
     Eigen::VectorXd h = Eigen::VectorXd(3);
     h << rho, theta, rho_dot;
     Eigen::VectorXd y = z - h;
+
     while (y(1) > M_PI || y(1) < -M_PI) {
         if ( y(1) > M_PI ) {
             y(1) -= M_PI;
@@ -37,11 +38,11 @@ void KalmanFilter::UpdateEKF(const Eigen::VectorXd &z) {
             y(1) += M_PI;
         }
     }
-    UpdateWithY(y);
+
+    UpdateXAndP(y);
 }
 
-// TODO: RENAME!!!!!!!
-void KalmanFilter::UpdateWithY(const Eigen::VectorXd &y) {
+void KalmanFilter::UpdateXAndP(const Eigen::VectorXd &y) {
   Eigen::MatrixXd Ht = H.transpose();
   Eigen::MatrixXd S = H * P * Ht + R;
   Eigen::MatrixXd Si = S.inverse();

@@ -10,7 +10,7 @@ Eigen::VectorXd Tools::CalculateRMSE(const std::vector<Eigen::VectorXd> &estimat
 		return rmse;
 	}
 
-	for(int i = 0; i < estimations.size(); ++i){
+	for(uint i = 0; i < estimations.size(); ++i){
 		Eigen::VectorXd residual = estimations[i] - groundTruth[i];
 		residual = residual.array() * residual.array();
 		rmse += residual;

@@ -23,7 +23,7 @@ public:
     void Predict();
     void Update(const Eigen::VectorXd &z);
     void UpdateEKF(const Eigen::VectorXd &z);
-    void UpdateWithY(const Eigen::VectorXd &y);
+    void UpdateXAndP(const Eigen::VectorXd &y);
 };
 
 #endif /* KALMAN_FILTER_H_ */
